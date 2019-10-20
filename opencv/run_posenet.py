@@ -28,6 +28,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--res', help='Resolution', default='640x480',
                         choices=['480x360', '640x480', '1280x720'])
+    parser.add_argument('--mirror', help='flip video horizontally', action='store_true')
     parser.add_argument('--model', help='.tflite model path',
                         default=os.path.join(default_model_dir,default_model))
     parser.add_argument('--labels', help='label file path',
