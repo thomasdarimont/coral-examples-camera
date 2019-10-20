@@ -26,6 +26,8 @@ def main():
     default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
     default_labels = 'coco_labels.txt'
     parser = argparse.ArgumentParser()
+    parser.add_argument('--res', help='Resolution', default='640x480',
+                        choices=['480x360', '640x480', '1280x720'])
     parser.add_argument('--model', help='.tflite model path',
                         default=os.path.join(default_model_dir,default_model))
     parser.add_argument('--labels', help='label file path',
