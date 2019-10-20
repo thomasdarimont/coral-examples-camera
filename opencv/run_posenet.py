@@ -24,9 +24,9 @@ class CustomImage:
 
     def __init__(self, cv2Image, scaleFactor=10):
         self.cv2Image = cv2Image
-        self.w = int(cv2Image.shape[1] * scaleFactor / 100)
-        self.h = int(cv2Image.shape[0] * scaleFactor / 100)
-        self.dim = (self.h, self.w)
+        self.w = int(cv2Image.shape[0] * scaleFactor / 100)
+        self.h = int(cv2Image.shape[1] * scaleFactor / 100)
+        self.dim = (self.w, self.h)
         self.scaledImage = cv2.resize(cv2Image, self.dim, interpolation=cv2.INTER_AREA)
         self.lH, self.lW = self.scaledImage.shape[:2]
 
