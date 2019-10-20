@@ -27,7 +27,7 @@ def draw_pose(cv2TargetImage, pose, color='yellow', threshold=0.2):
         if keypoint.score < threshold: continue
         xys[label] = (int(keypoint.yx[1]), int(keypoint.yx[0]))
 
-        cv2.circle(cv2TargetImage, (int(keypoint.yx[1]), int(keypoint.yx[0])), radius=5, color='cyan', thickness=1)
+        cv2.circle(cv2TargetImage, (int(keypoint.yx[1]), int(keypoint.yx[0])), radius=5, color=(255,0,0), thickness=1)
         # dwg.add(dwg.circle(center=(int(keypoint.yx[1]), int(keypoint.yx[0])), r=5, fill='cyan', fill_opacity=keypoint.score, stroke=color))
 
     xysNose = xys.get("nose")
@@ -37,7 +37,7 @@ def draw_pose(cv2TargetImage, pose, color='yellow', threshold=0.2):
         xLeftEar = xysLeftEar[1]
         xRightEar = xysRightEar[1]
         dxEars = abs(xLeftEar - xRightEar)
-        cv2.circle(cv2TargetImage, (xysNose[0], xysNose[1]), radius=int(dxEars/1.4), color='red', thickness=1)
+        cv2.circle(cv2TargetImage, (xysNose[0], xysNose[1]), radius=int(dxEars/1.4), color=(255,0,0), thickness=1)
 
 def main():
 
