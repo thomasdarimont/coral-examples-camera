@@ -15,11 +15,10 @@ Press Q key to exit.
 
 """
 import cv2
-from PIL import Image
 import argparse
-import os
 from pose_engine import PoseEngine
 import time
+import numpy as np
 
 class Cv2PosenetExample:
 
@@ -39,6 +38,18 @@ class Cv2PosenetExample:
             self.src_size = (1280, 720)
             self.appsink_size = (1280, 720)
             self.model = args.model or default_model % (721, 1281)
+
+        # see https://www.pyimagesearch.com/2016/04/25/watermarking-images-with-opencv-and-python/
+        self.noseImage = self.load_image("media/Nose.png")
+
+    def load_image(self, imagePath):
+        img = cv2.imread(imagePath, cv2.IMREAD_UNCHANGED)
+        (B, G, R, A) = cv2.split(img)
+        B = cv2.bitwise_and(B, B, mask=A)
+        G = cv2.bitwise_and(G, G, mask=A)
+        R = cv2.bitwise_and(R, R, mask=A)
+        convertedImage = cv2.merge([B, G, R, A])
+        return convertedImage
 
     def run(self):
         print('Loading model: ', self.model)
@@ -85,6 +96,23 @@ class Cv2PosenetExample:
         cv2.destroyAllWindows()
 
     def draw_pose(self, cv2TargetImage, pose, color=(0,255,255), threshold=0.2):
+
+        (h, w) = cv2TargetImage.shape[:2]
+
+        image = np.dstack([cv2TargetImage, np.ones((h, w), dtype="uint8") * 255])
+
+        # construct an overlay that is the same size as the input
+        # image, (using an extra dimension for the alpha transparency),
+        # then add the watermark to the overlay in the bottom-right
+        # corner
+        overlay = np.zeros((h, w, 4), dtype="uint8")
+        (wH, wW) = self.noseImage.shape[:2]
+        overlay[h - wH - 10:h - 10, w - wW - 10:w - 10] = self.noseImage
+
+        # blend the two images together using transparent overlays
+        cv2TargetImage = cv2TargetImage.copy()
+        cv2.addWeighted(overlay, 1.0, cv2TargetImage, 1.0, 0, cv2TargetImage)
+
         xys = {}
         for label, keypoint in pose.keypoints.items():
             if keypoint.score < threshold: continue
@@ -101,6 +129,7 @@ class Cv2PosenetExample:
             xRightEar = xysRightEar[1]
             dxEars = abs(xLeftEar - xRightEar)
             cv2.circle(cv2TargetImage, (xysNose[0], xysNose[1]), radius=int(dxEars/1.4), color=color, thickness=-1)
+
 
 def main():
 
