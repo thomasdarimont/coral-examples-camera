@@ -64,10 +64,10 @@ def main():
             break
         cv2_im = frame
 
-        pil_im = Image.fromarray(cv2_im)
+        #pil_im = Image.fromarray(cv2_im)
 
         start_time = time.monotonic()
-        outputs, inference_time = engine.DetectPosesInImage(pil_im)
+        outputs, inference_time = engine.DetectPosesInImage(cv2_im)
         end_time = time.monotonic()
         n += 1
         sum_fps += 1.0 / (end_time - last_time)
