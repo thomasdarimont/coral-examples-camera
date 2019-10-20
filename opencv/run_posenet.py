@@ -22,23 +22,15 @@ from pose_engine import PoseEngine
 import time
 
 def main():
-    default_model_dir = '../../all_models'
-    default_model = 'mobilenet_ssd_v2_coco_quant_postprocess_edgetpu.tflite'
-    default_labels = 'coco_labels.txt'
-    parser = argparse.ArgumentParser()
+
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--mirror', help='flip video horizontally', action='store_true')
+    parser.add_argument('--model', help='.tflite model path.', required=False)
     parser.add_argument('--res', help='Resolution', default='640x480',
                         choices=['480x360', '640x480', '1280x720'])
-    parser.add_argument('--mirror', help='flip video horizontally', action='store_true')
-    parser.add_argument('--model', help='.tflite model path',
-                        default=os.path.join(default_model_dir,default_model))
-    parser.add_argument('--labels', help='label file path',
-                        default=os.path.join(default_model_dir, default_labels))
-    parser.add_argument('--top_k', type=int, default=3,
-                        help='number of classes with highest score to display')
-    parser.add_argument('--threshold', type=float, default=0.1,
-                        help='class score threshold')
+    parser.add_argument('--videosrc', help='Which video source to use', default='/dev/video0')
+    parser.add_argument('--h264', help='Use video/x-h264 input', action='store_true')
     args = parser.parse_args()
-
 
     default_model = 'models/posenet_mobilenet_v1_075_%d_%d_quant_decoder_edgetpu.tflite'
     if args.res == '480x360':
